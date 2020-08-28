@@ -39,4 +39,3 @@ class PriorityQueue {
     return this.list.length === 0;
   }
 }
-module.exports = { PriorityQueue };
