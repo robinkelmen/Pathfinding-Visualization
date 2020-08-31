@@ -1,6 +1,7 @@
 class QueueItem {
   constructor(item, priority) {
     this.item = item;
+
     this.priority = priority;
   }
 
@@ -107,6 +108,13 @@ class Heap {
     this.sinkKey(0);
     return item;
   }
+  contains(item) {
+    for (var i = 0; this.heap.heapSize; i++) {
+      if (this.list[i].getItem() == item) {
+        return true;
+      }
+    }
+  }
 }
 class MinPriorityQueue {
   heap = new Heap();
@@ -124,5 +132,8 @@ class MinPriorityQueue {
   pop() {
     return this.heap.pop();
   }
+  contains(item) {
+    return this.heap.contains(item);
+  }
 }
-module.exports = MinPriorityQueue;
+module.exports = { MinPriorityQueue, QueueItem };
