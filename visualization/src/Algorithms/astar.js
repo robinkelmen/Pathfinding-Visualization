@@ -1,21 +1,21 @@
-import { MinPriorityQueue, QueueItem } from "../algorithms/PriorityQueue";
+import { MinPriorityQueue, QueueItem } from "./PriorityQueue";
 
-function astar(start, goal, grid) {
+export const astar = (start, goal, grid) => {
   var openSet = new MinPriorityQueue();
 
   var closedSet = [];
   start.gscore = 0;
 
   openSet.insert(new QueueItem(start, getDistance(goal, start)));
-  while (openSet.length != 0) {
+  while (openSet.length !== 0) {
     const currentnode = openSet.pop();
     closedSet.push(currentnode);
 
-    if (currentnode == end) {
+    if (currentnode === goal) {
       console.log("path found");
     }
     const neighbours = getNeighbours(currentnode, grid);
-    for (var i = 0; i < neighbours.length(); i++) {
+    for (let i = 0; i < neighbours.length; i++) {
       const neighbour = neighbours[i];
       const { gscore } = neighbour;
       var g = currentnode.gscore + getDistance(neighbour, currentnode);
@@ -31,7 +31,8 @@ function astar(start, goal, grid) {
       }
     }
   }
-}
+  return closedSet;
+};
 function getDistance(node, target) {
   var { col, row } = node;
   const ncol = col;
@@ -44,21 +45,21 @@ function getDistance(node, target) {
   return distance;
 }
 function getNeighbours(node, grid) {
-  const { col, row } = node;
   const neighbours = [];
+  const { col, row } = node;
 
-  if (col < grid[0].length - 1) neighbours.push(grid[row][col + 1]);
   if (col > 0) neighbours.push(grid[row][col - 1]);
+  if (col < grid.length - 1) neighbours.push(grid[row][col + 1]);
   if (row > 0) neighbours.push(grid[row - 1][col]);
-  if (row < grid.length - 1) neighbours.push(grid[row + 1][col]);
-  return neighbours.filter((neighbour) => !isVisited);
+  if (row < grid[0].length - 1) neighbours.push(grid[row + 1][col]);
+  return neighbours.filter((neighbour) => !neighbour.isVisited);
 }
-function pathOrder(goal) {
+export const pathOrder = (goal) => {
   const path = [];
   let current = goal;
-  while (current != null) {
+  while (current !== null) {
     path.push(current);
     current = current.previousNode;
   }
   return path;
-}
+};

@@ -29,10 +29,12 @@ class Comparator {
   }
 }
 class Heap {
-  list = [];
+  constructor() {
+    this.list = [];
+  }
 
   parent(index) {
-    return (index - 1) / 2;
+    return index <= 0 ? 0 : (index - 1) / 2;
   }
 
   left(index) {
@@ -44,53 +46,56 @@ class Heap {
   }
   swap(i, j) {
     if (i >= 0 && j >= 0 && j < this.list.length && i < this.list.length) {
-      let temp = list[i];
-      list[i] = list[j];
-      list[j] = temp;
+      let temp = this.list[i];
+      this.list[i] = this.list[j];
+      this.list[j] = temp;
     }
   }
 
   sinkKey(index) {
-    let left = left(index);
-    let right = right(index);
-    let swap = i;
+    let left = this.left(index);
+    let right = this.right(index);
+    let swap = index;
 
     if (
       left < this.list.length &&
-      Comparator.QueueItemComp(list[i], list[left]) > 0
+      Comparator.QueueItemComp(this.list[index], this.list[left]) > 0
     ) {
       swap = left;
       if (
         right < this.list.length &&
-        Comparator.QueueItemComp(list[right], this.list[left]) >= 0
+        Comparator.QueueItemComp(this.list[right], this.list[left]) >= 0
       ) {
         swap = right;
       }
     }
     if (
       right < this.list.length &&
-      Comparator.QueueItemComp(list[index], list[right]) > 0
+      Comparator.QueueItemComp(this.list[index], this.list[right]) > 0
     ) {
       swap = right;
       if (
         left < this.list.length &&
-        Comparator.QueueItemComp(list[right], this.list[left]) <= 0
+        Comparator.QueueItemComp(this.list[right], this.list[left]) <= 0
       ) {
         swap = left;
       }
     }
 
-    if (swap != i) {
+    if (swap !== index) {
       swap(index, swap);
       this.sinkKey(swap);
     }
   }
   raiseKey(index) {
-    let comp = Comparator.QueueItemComp(list[i], this.list[parent(index)]);
-    if (index == 0) return;
+    let comp = Comparator.QueueItemComp(
+      this.list[index],
+      this.list[this.parent(index)]
+    );
+    if (index === 0) return;
     if (comp < 0) {
-      this.swap(index, parent(index));
-      this.raiseKey(parent(index));
+      this.swap(index, this.parent(index));
+      this.raiseKey(this.parent(index));
     }
   }
   heapSize() {
@@ -100,7 +105,7 @@ class Heap {
     this.list.push(item);
   }
   peek() {
-    return list[0];
+    return this.list[0];
   }
   minPop() {
     let item = this.list.shift();
@@ -109,8 +114,8 @@ class Heap {
     return item;
   }
   contains(item) {
-    for (var i = 0; this.heap.heapSize; i++) {
-      if (this.list[i].getItem() == item) {
+    for (let i = 0; this.heap.heapSize; i++) {
+      if (this.list[i].getItem() === item) {
         return true;
       }
     }
@@ -124,13 +129,13 @@ class MinPriorityQueue {
 
   insert(item) {
     this.heap.insert(item);
-    this.heap.raiseKey(heapSize - 1);
+    this.heap.raiseKey(this.heap.heapSize() - 1);
   }
   peekMin() {
     return this.heap.peek();
   }
   pop() {
-    return this.heap.pop();
+    return this.heap.minPop();
   }
   contains(item) {
     return this.heap.contains(item);
