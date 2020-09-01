@@ -27,7 +27,7 @@ export default class Node extends Component {
 
     return (
       <div
-        id={`node-${col}-${row}`}
+        id={`node-${row}-${col}`}
         className={`node ${variableClassName}`}
         onClick={() => this.handleClick()}
       ></div>

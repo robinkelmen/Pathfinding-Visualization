@@ -44,7 +44,7 @@ export default class Visualizer extends Component {
         const start = nodes[START_NODE_ROW][START_NODE_COL];
         const node = closedSet[i].getItem();
         if (node !== start) {
-          document.getElementById(`node-${node.col}-${node.row}`).className =
+          document.getElementById(`node-${node.row}-${node.col}`).className =
             "node node-visited";
         }
       }, 10 * i);
@@ -59,7 +59,7 @@ export default class Visualizer extends Component {
         const node = path[i];
         if (node !== start) {
           console.log(node);
-          document.getElementById(`node-${node.col}-${node.row}`).className =
+          document.getElementById(`node-${node.row}-${node.col}`).className =
             "node node-shortest-path";
         }
       }, 50 * i);
