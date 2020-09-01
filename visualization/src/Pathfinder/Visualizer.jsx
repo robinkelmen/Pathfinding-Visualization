@@ -24,14 +24,15 @@ export default class Visualizer extends Component {
   }
   visualize() {
     const { nodes } = this.state;
-    const start = nodes[START_NODE_COL][START_NODE_ROW];
-    const goal = nodes[TARGET_NODE_COL][TARGET_NODE_ROW];
+    const start = nodes[START_NODE_ROW][START_NODE_COL];
+    const goal = nodes[TARGET_NODE_ROW][TARGET_NODE_COL];
     const closedSet = astar(start, goal, nodes);
     const path = pathOrder(goal);
-    this.animateatart(closedSet, path);
+    this.animateStart(closedSet, path);
   }
-  animateatart(closedSet, path) {
-    for (let i = 0; i < closedSet.lenth; i++) {
+  animateStart(closedSet, path) {
+    console.log("trying to animate");
+    for (let i = 0; i <= closedSet.length; i++) {
       if (i === closedSet.length) {
         setTimeout(() => {
           this.animatePath(path);
@@ -39,18 +40,28 @@ export default class Visualizer extends Component {
         return;
       }
       setTimeout(() => {
-        const node = closedSet[i];
-        document.getElementById(`node-${node.row}-${node.col}`).className =
-          "node node-visited";
+        const { nodes } = this.state;
+        const start = nodes[START_NODE_ROW][START_NODE_COL];
+        const node = closedSet[i].getItem();
+        if (node !== start) {
+          document.getElementById(`node-${node.row}-${node.col}`).className =
+            "node node-visited";
+        }
       }, 10 * i);
     }
   }
   animatePath(path) {
     for (let i = 0; i < path.length; i++) {
       setTimeout(() => {
+        const { nodes } = this.state;
+        const start = nodes[START_NODE_ROW][START_NODE_COL];
+
         const node = path[i];
-        document.getElementById(`node-${node.row}-${node.col}`).className =
-          "node node-shortest-path";
+        if (node !== start) {
+          console.log(node);
+          document.getElementById(`node-${node.row}-${node.col}`).className =
+            "node node-shortest-path";
+        }
       }, 50 * i);
     }
   }

@@ -10,7 +10,7 @@ export default class Node extends Component {
   }
   render() {
     const {
-      column,
+      col,
       row,
       isStart,
       isTarget,
@@ -27,7 +27,7 @@ export default class Node extends Component {
 
     return (
       <div
-        id={`node-${row}-${column}`}
+        id={`node-${row}-${col}`}
         className={`node ${variableClassName}`}
         onClick={() => this.handleClick()}
       ></div>

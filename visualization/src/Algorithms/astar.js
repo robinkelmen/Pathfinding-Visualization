@@ -5,28 +5,45 @@ export const astar = (start, goal, grid) => {
 
   var closedSet = [];
   start.gscore = 0;
+  console.log("openset");
 
-  openSet.insert(new QueueItem(start, getDistance(goal, start)));
-  while (openSet.length !== 0) {
+  let newNode = new QueueItem(start, getDistance(goal, start));
+
+  openSet.insert(newNode);
+
+  while (!openSet.isEmpty()) {
     const currentnode = openSet.pop();
-    closedSet.push(currentnode);
+    currentnode.getItem().isVisited = true;
 
-    if (currentnode === goal) {
+    closedSet.push(currentnode);
+    if (currentnode === null) break;
+    if (currentnode.getItem() === goal) {
       console.log("path found");
+      break;
     }
-    const neighbours = getNeighbours(currentnode, grid);
+    const neighbours = getNeighbours(currentnode.getItem(), grid);
+
     for (let i = 0; i < neighbours.length; i++) {
       const neighbour = neighbours[i];
-      const { gscore } = neighbour;
-      var g = currentnode.gscore + getDistance(neighbour, currentnode);
+      let isClosed = false;
+
+      for (let j = 0; j < closedSet.length; j++) {
+        if (closedSet[j] === neighbour) isClosed = true;
+      }
+      if (isClosed) continue;
+
+      var g = currentnode.getItem().gscore + 1;
+
       var h = getDistance(goal, neighbour);
+
       var f = g + h;
-      if (g < gscore) {
-        neighbour.previousNode = currentnode;
+
+      if (g < neighbour.gscore) {
+        neighbour.previousNode = currentnode.getItem();
         neighbour.gscore = g;
-        neighbour.isVisited = true;
+        //neighbour.isVisited = true;
         if (!openSet.contains(neighbour)) {
-          openSet.push(new QueueItem(neighbour, f));
+          openSet.insert(new QueueItem(neighbour, f));
         }
       }
     }
@@ -34,19 +51,19 @@ export const astar = (start, goal, grid) => {
   return closedSet;
 };
 function getDistance(node, target) {
-  var { col, row } = node;
-  const ncol = col;
-  const nrow = row;
-  var { xcol, xrow } = target;
+  var x = (target.col - node.col) ^ 2;
+  var y = (target.row - node.row) ^ 2;
 
-  var x = xcol - ncol;
-  var y = xrow - nrow;
-  var distance = (x + y) / 2;
+  var distance = x + y;
   return distance;
+}
+function getLoc(node) {
+  const { col, row } = node;
+  return { col, row };
 }
 function getNeighbours(node, grid) {
   const neighbours = [];
-  const { col, row } = node;
+  const { row, col } = node;
 
   if (col > 0) neighbours.push(grid[row][col - 1]);
   if (col < grid.length - 1) neighbours.push(grid[row][col + 1]);
