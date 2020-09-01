@@ -5,7 +5,7 @@ import { astar, pathOrder } from "../Algorithms/astar";
 
 const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
-const TARGET_NODE_ROW = 10;
+const TARGET_NODE_ROW = 27;
 const TARGET_NODE_COL = 25;
 const GRID_SIZE_ROW = 30;
 const GRID_SIZE_COL = 30;
@@ -44,7 +44,7 @@ export default class Visualizer extends Component {
         const start = nodes[START_NODE_ROW][START_NODE_COL];
         const node = closedSet[i].getItem();
         if (node !== start) {
-          document.getElementById(`node-${node.row}-${node.col}`).className =
+          document.getElementById(`node-${node.col}-${node.row}`).className =
             "node node-visited";
         }
       }, 10 * i);
@@ -59,7 +59,7 @@ export default class Visualizer extends Component {
         const node = path[i];
         if (node !== start) {
           console.log(node);
-          document.getElementById(`node-${node.row}-${node.col}`).className =
+          document.getElementById(`node-${node.col}-${node.row}`).className =
             "node node-shortest-path";
         }
       }, 50 * i);
@@ -125,7 +125,7 @@ const createNode = (col, row) => {
     col,
     row,
     isStart: row === START_NODE_COL && col === START_NODE_ROW,
-    isTarget: row === TARGET_NODE_ROW && col === TARGET_NODE_COL,
+    isTarget: row === TARGET_NODE_COL && col === TARGET_NODE_ROW,
     isVisited: false,
     isPath: false,
     isWall: false,

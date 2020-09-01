@@ -51,8 +51,11 @@ export const astar = (start, goal, grid) => {
   return closedSet;
 };
 function getDistance(node, target) {
-  var x = (target.col - node.col) ^ 2;
-  var y = (target.row - node.row) ^ 2;
+  var x = Math.pow((target.col - node.col) ^ 2);
+  var y = Math.pow(target.row - node.row, 2);
+  console.log(node);
+  console.log(target);
+  console.log(y);
 
   var distance = x + y;
   return distance;
@@ -65,10 +68,11 @@ function getNeighbours(node, grid) {
   const neighbours = [];
   const { row, col } = node;
 
-  if (col > 0) neighbours.push(grid[row][col - 1]);
-  if (col < grid.length - 1) neighbours.push(grid[row][col + 1]);
-  if (row > 0) neighbours.push(grid[row - 1][col]);
-  if (row < grid[0].length - 1) neighbours.push(grid[row + 1][col]);
+  if (col > 0) neighbours.push(grid[col - 1][row]);
+  if (col < grid.length - 1) neighbours.push(grid[col + 1][row]);
+  if (row > 0) neighbours.push(grid[col][row - 1]);
+  if (row < grid[0].length - 1) neighbours.push(grid[col][row + 1]);
+
   return neighbours.filter((neighbour) => !neighbour.isVisited);
 }
 export const pathOrder = (goal) => {

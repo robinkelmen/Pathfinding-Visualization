@@ -18,14 +18,7 @@ class Comparator {
     let ip = i.getPriority();
     let jp = j.getPriority();
 
-    if (ip > jp) {
-      return 1;
-    }
-    if (ip < jp) {
-      return -1;
-    }
-
-    return 0;
+    return ip - jp;
   }
 }
 class Heap {
@@ -104,6 +97,7 @@ class Heap {
   }
   insert(item) {
     this.list.push(item);
+    this.raiseKey(this.list.length - 1);
   }
   peek() {
     return this.list[0];
@@ -138,8 +132,6 @@ class MinPriorityQueue {
 
   insert(item) {
     this.heap.insert(item);
-
-    this.heap.raiseKey(this.heap.heapSize() - 1);
   }
   peekMin() {
     return this.heap.peek();
