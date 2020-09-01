@@ -72,10 +72,10 @@ export default class Visualizer extends Component {
       <div className="visualizer">
         foo
         <button onClick={() => this.visualize()}>Start Visual</button>
-        {nodes.map((mycol, colindex) => {
+        {nodes.map((myrow, rowindex) => {
           return (
-            <div key={colindex}>
-              {mycol.map((node, nodeindex) => {
+            <div key={rowindex}>
+              {myrow.map((node, nodeindex) => {
                 const {
                   row,
                   col,
@@ -110,22 +110,22 @@ export default class Visualizer extends Component {
 
 const createGrid = (x, y) => {
   const nodes = [];
-  for (let col = 0; col < x; col++) {
+  for (let row = 0; row < x; row++) {
     const currentcol = [];
-    for (let row = 0; row < y; row++) {
-      currentcol.push(createNode(col, row));
+    for (let col = 0; col < y; col++) {
+      currentcol.push(createNode(row, col));
     }
 
     nodes.push(currentcol);
   }
   return nodes;
 };
-const createNode = (col, row) => {
+const createNode = (row, col) => {
   return {
     col,
     row,
-    isStart: row === START_NODE_COL && col === START_NODE_ROW,
-    isTarget: row === TARGET_NODE_COL && col === TARGET_NODE_ROW,
+    isStart: row === START_NODE_ROW && col === START_NODE_COL,
+    isTarget: row === TARGET_NODE_ROW && col === TARGET_NODE_COL,
     isVisited: false,
     isPath: false,
     isWall: false,

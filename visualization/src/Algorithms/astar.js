@@ -16,7 +16,7 @@ export const astar = (start, goal, grid) => {
     currentnode.getItem().isVisited = true;
 
     closedSet.push(currentnode);
-    if (currentnode === null) break;
+    //if (currentnode === null) break;
     if (currentnode.getItem() === goal) {
       console.log("path found");
       break;
@@ -52,7 +52,7 @@ export const astar = (start, goal, grid) => {
 };
 function getDistance(node, target) {
   //eucledian distance
-  var x = Math.pow((target.col - node.col) ^ 2);
+  var x = Math.pow(target.col - node.col, 2);
   var y = Math.pow(target.row - node.row, 2);
 
   var distance = x + y;
@@ -66,12 +66,14 @@ function getNeighbours(node, grid) {
   const neighbours = [];
   const { row, col } = node;
 
-  if (col > 0) neighbours.push(grid[row][col - 1]);
-  if (col < grid[0].length - 1) neighbours.push(grid[row][col + 1]);
+  if (col > 0) neighbours.push(grid[col - 1][row]);
+  if (col < grid[0].length - 1) neighbours.push(grid[col + 1][row]);
 
-  if (row > 0) neighbours.push(grid[row - 1][col]);
+  if (row > 0) neighbours.push(grid[col][row - 1]);
   if (row < grid.length - 1) neighbours.push(grid[row + 1][col]);
-
+  console.log(col, row);
+  console.log(node);
+  console.log(neighbours);
   return neighbours.filter((neighbour) => !neighbour.isVisited);
 }
 export const pathOrder = (goal) => {

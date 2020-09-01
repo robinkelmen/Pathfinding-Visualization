@@ -5,7 +5,7 @@ import "./Node.css";
 export default class Node extends Component {
   handleClick() {
     console.log(
-      "Location is" + "[" + this.props.col + "," + this.props.row + "]"
+      "Location is" + "[" + this.props.row + "," + this.props.col + "]"
     );
   }
   render() {
