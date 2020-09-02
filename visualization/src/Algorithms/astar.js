@@ -22,42 +22,47 @@ export const astar = (start, goal, grid) => {
       break;
     }
     const neighbours = getNeighbours(currentnode.getItem(), grid);
-    let childToAdd = null;
-    let lowestCost = null;
-    let lowestF = null;
+    const { closest, lowestF } = closestNode(currentnode, goal, neighbours);
 
-    for (let i = 0; i < neighbours.length; i++) {
-      const neighbour = neighbours[i];
-      let isClosed = false;
-
-      for (let j = 0; j < closedSet.length; j++) {
-        if (closedSet[j] === neighbour) isClosed = true;
-      }
-      if (isClosed) continue;
-
-      var g = currentnode.getItem().gscore + 1;
-
-      var h = getDistance(goal, neighbour);
-
-      var f = g + h;
-      console.log(neighbour);
-      if (g < neighbour.gscore) {
-        childToAdd = neighbour;
-        lowestCost = g;
-        lowestF = f;
-        //neighbour.isVisited = true;
-      }
-    }
-    childToAdd.previousNode = currentnode.getItem();
-    childToAdd.gscore = g;
-    if (!openSet.contains(childToAdd)) {
+    if (!openSet.contains(closest)) {
       console.log("found a child that is worthy");
-      console.log(childToAdd);
-      openSet.insert(new QueueItem(childToAdd, lowestF));
+      console.log(closest);
+      openSet.insert(new QueueItem(closest, lowestF));
     }
   }
+
   return closedSet;
 };
+function closestNode(currentnode, goal, neighbours) {
+  let closest = null;
+  let lowestCost = null;
+  let lowestF = null;
+
+  for (let i = 0; i < neighbours.length; i++) {
+    const neighbour = neighbours[i];
+    let tempG = Infinity;
+
+    var g =
+      currentnode.getItem().gscore +
+      getDistance(neighbour, currentnode.getItem());
+
+    var h = getDistance(goal, neighbour);
+
+    var f = g + h;
+
+    if (g < tempG) {
+      console.log("in low g at ", i);
+      closest = neighbour;
+      lowestCost = g;
+      lowestF = f;
+      tempG = g;
+      //neighbour.isVisited = true;
+    }
+  }
+  closest.previousNode = currentnode.getItem();
+  closest.gscore = lowestCost;
+  return { closest, lowestF };
+}
 //manhatan distance
 function getDistance(node, target) {
   //eucledian distance
@@ -81,9 +86,6 @@ function getNeighbours(node, grid) {
   if (row > 0) neighbours.push(grid[row - 1][col]);
   if (row < grid.length - 1) neighbours.push(grid[row + 1][col]);
 
-  console.log(col, row);
-  console.log(node);
-  console.log(neighbours);
   return neighbours.filter((neighbour) => !neighbour.isVisited);
 }
 export const pathOrder = (goal) => {

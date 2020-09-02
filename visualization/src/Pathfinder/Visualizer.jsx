@@ -58,7 +58,6 @@ export default class Visualizer extends Component {
 
         const node = path[i];
         if (node !== start) {
-          console.log(node);
           document.getElementById(`node-${node.row}-${node.col}`).className =
             "node node-shortest-path";
         }
@@ -129,7 +128,7 @@ const createNode = (row, col) => {
     isVisited: false,
     isPath: false,
     isWall: false,
-    gscore: 30 * 30,
+    gscore: Infinity,
     previousNode: null,
   };
 };
