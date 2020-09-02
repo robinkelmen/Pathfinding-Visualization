@@ -10,7 +10,7 @@ export const astar = (start, goal, grid) => {
   let newNode = new QueueItem(start, getDistance(goal, start));
 
   openSet.insert(newNode);
-
+  let childrenCount = 0;
   while (!openSet.isEmpty()) {
     const currentnode = openSet.pop();
     currentnode.getItem().isVisited = true;
@@ -22,7 +22,10 @@ export const astar = (start, goal, grid) => {
       break;
     }
     const neighbours = getNeighbours(currentnode.getItem(), grid);
-
+    const  childToAdd;
+    const lowestCost;
+    const lowestF;
+    
     for (let i = 0; i < neighbours.length; i++) {
       const neighbour = neighbours[i];
       let isClosed = false;
@@ -32,28 +35,36 @@ export const astar = (start, goal, grid) => {
       }
       if (isClosed) continue;
 
-      var g = currentnode.getItem().gscore + 1;
+      var g =
+        currentnode.getItem().gscore +
+        getDistance(neighbour, currentnode.getItem());
 
       var h = getDistance(goal, neighbour);
 
       var f = g + h;
 
       if (g < neighbour.gscore) {
-        neighbour.previousNode = currentnode.getItem();
-        neighbour.gscore = g;
+        childToAdd = neighbour;
+        lowestCost = g;
+        lowestF = f;
+
         //neighbour.isVisited = true;
-        if (!openSet.contains(neighbour)) {
-          openSet.insert(new QueueItem(neighbour, f));
-        }
+      }
+      childToAdd.previousNode = currentnode.getItem();
+      childToAdd.gscore = g;
+      if (!openSet.contains(neighbour)) {
+        console.log("found a child that is worthy");
+        openSet.insert(new QueueItem(childToAdd, lowestF));
       }
     }
   }
   return closedSet;
 };
+//manhatan distance
 function getDistance(node, target) {
   //eucledian distance
-  var x = Math.pow(target.col - node.col, 2);
-  var y = Math.pow(target.row - node.row, 2);
+  var x = Math.abs(target.col - node.col);
+  var y = Math.abs(target.row - node.row);
 
   var distance = x + y;
   return distance;
@@ -66,11 +77,12 @@ function getNeighbours(node, grid) {
   const neighbours = [];
   const { row, col } = node;
 
-  if (col > 0) neighbours.push(grid[col - 1][row]);
-  if (col < grid[0].length - 1) neighbours.push(grid[col + 1][row]);
+  if (col > 0) neighbours.push(grid[row][col - 1]);
+  if (col < grid[0].length - 1) neighbours.push(grid[row][col + 1]);
 
-  if (row > 0) neighbours.push(grid[col][row - 1]);
+  if (row > 0) neighbours.push(grid[row - 1][col]);
   if (row < grid.length - 1) neighbours.push(grid[row + 1][col]);
+
   console.log(col, row);
   console.log(node);
   console.log(neighbours);

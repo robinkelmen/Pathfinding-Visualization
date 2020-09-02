@@ -3,10 +3,10 @@ import Node from "./Node/Node";
 import "./Visualizer.css";
 import { astar, pathOrder } from "../Algorithms/astar";
 
-const START_NODE_ROW = 10;
-const START_NODE_COL = 15;
-const TARGET_NODE_ROW = 27;
-const TARGET_NODE_COL = 25;
+const START_NODE_ROW = 6;
+const START_NODE_COL = 10;
+const TARGET_NODE_ROW = 16;
+const TARGET_NODE_COL = 16;
 const GRID_SIZE_ROW = 30;
 const GRID_SIZE_COL = 30;
 
@@ -129,7 +129,7 @@ const createNode = (row, col) => {
     isVisited: false,
     isPath: false,
     isWall: false,
-    gscore: Infinity,
+    gscore: 30 * 30,
     previousNode: null,
   };
 };
