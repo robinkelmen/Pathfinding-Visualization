@@ -22,10 +22,10 @@ export const astar = (start, goal, grid) => {
       break;
     }
     const neighbours = getNeighbours(currentnode.getItem(), grid);
-    const  childToAdd;
-    const lowestCost;
-    const lowestF;
-    
+    let childToAdd = null;
+    let lowestCost = null;
+    let lowestF = null;
+
     for (let i = 0; i < neighbours.length; i++) {
       const neighbour = neighbours[i];
       let isClosed = false;
@@ -35,27 +35,25 @@ export const astar = (start, goal, grid) => {
       }
       if (isClosed) continue;
 
-      var g =
-        currentnode.getItem().gscore +
-        getDistance(neighbour, currentnode.getItem());
+      var g = currentnode.getItem().gscore + 1;
 
       var h = getDistance(goal, neighbour);
 
       var f = g + h;
-
+      console.log(neighbour);
       if (g < neighbour.gscore) {
         childToAdd = neighbour;
         lowestCost = g;
         lowestF = f;
-
         //neighbour.isVisited = true;
       }
-      childToAdd.previousNode = currentnode.getItem();
-      childToAdd.gscore = g;
-      if (!openSet.contains(neighbour)) {
-        console.log("found a child that is worthy");
-        openSet.insert(new QueueItem(childToAdd, lowestF));
-      }
+    }
+    childToAdd.previousNode = currentnode.getItem();
+    childToAdd.gscore = g;
+    if (!openSet.contains(childToAdd)) {
+      console.log("found a child that is worthy");
+      console.log(childToAdd);
+      openSet.insert(new QueueItem(childToAdd, lowestF));
     }
   }
   return closedSet;
@@ -63,8 +61,8 @@ export const astar = (start, goal, grid) => {
 //manhatan distance
 function getDistance(node, target) {
   //eucledian distance
-  var x = Math.abs(target.col - node.col);
-  var y = Math.abs(target.row - node.row);
+  var x = Math.pow(target.col - node.col, 2); //Math.abs(target.col - node.col);
+  var y = Math.pow(target.row - node.row, 2);
 
   var distance = x + y;
   return distance;
