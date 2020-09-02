@@ -115,11 +115,12 @@ class Heap {
   contains(item) {
     for (let i = 0; i < this.heapSize(); i++) {
       let current = this.list[i].getItem();
-      if (current === item) {
-        return true;
+
+      if (current.col === item.col && current.row === item.row) {
+        return current;
       }
     }
-    return false;
+    return null;
   }
 }
 class MinPriorityQueue {

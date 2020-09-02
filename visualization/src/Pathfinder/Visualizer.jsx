@@ -5,7 +5,7 @@ import { astar, pathOrder } from "../Algorithms/astar";
 
 const START_NODE_ROW = 6;
 const START_NODE_COL = 10;
-const TARGET_NODE_ROW = 16;
+const TARGET_NODE_ROW = 0;
 const TARGET_NODE_COL = 16;
 const GRID_SIZE_ROW = 30;
 const GRID_SIZE_COL = 30;

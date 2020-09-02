@@ -22,52 +22,46 @@ export const astar = (start, goal, grid) => {
       break;
     }
     const neighbours = getNeighbours(currentnode.getItem(), grid);
-    const { closest, lowestF } = closestNode(currentnode, goal, neighbours);
-
-    if (!openSet.contains(closest)) {
-      console.log("found a child that is worthy");
-      console.log(closest);
-      openSet.insert(new QueueItem(closest, lowestF));
-    }
+    closestNode(currentnode, goal, neighbours, closedSet, openSet);
   }
 
   return closedSet;
 };
-function closestNode(currentnode, goal, neighbours) {
+function closestNode(currentnode, goal, neighbours, closedSet, openSet) {
   let closest = null;
   let lowestCost = null;
   let lowestF = null;
 
   for (let i = 0; i < neighbours.length; i++) {
     const neighbour = neighbours[i];
-    let tempG = Infinity;
-
-    var g =
-      currentnode.getItem().gscore +
-      getDistance(neighbour, currentnode.getItem());
+    if (
+      closedSet.filter(
+        (node) =>
+          node.getItem().col === neighbour.col &&
+          node.getItem().row === neighbour.row
+      ).length > 0
+    )
+      continue;
+    var g = currentnode.getItem().gscore + 1;
 
     var h = getDistance(goal, neighbour);
 
     var f = g + h;
 
-    if (g < tempG) {
-      console.log("in low g at ", i);
-      closest = neighbour;
-      lowestCost = g;
-      lowestF = f;
-      tempG = g;
-      //neighbour.isVisited = true;
-    }
+    let openNode = openSet.contains(neighbour);
+    if (openNode !== null && g > openNode.gscore) continue;
+
+    neighbour.gscore = g;
+    neighbour.previousNode = currentnode.getItem();
+
+    openSet.insert(new QueueItem(neighbour, f));
   }
-  closest.previousNode = currentnode.getItem();
-  closest.gscore = lowestCost;
-  return { closest, lowestF };
 }
 //manhatan distance
 function getDistance(node, target) {
   //eucledian distance
-  var x = Math.pow(target.col - node.col, 2); //Math.abs(target.col - node.col);
-  var y = Math.pow(target.row - node.row, 2);
+  var x = Math.abs(target.col - node.col);
+  var y = Math.abs(target.row - node.row);
 
   var distance = x + y;
   return distance;
