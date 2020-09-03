@@ -73,7 +73,7 @@ export default class Visualizer extends Component {
         <button onClick={() => this.visualize()}>Start Visual</button>
         {nodes.map((myrow, rowindex) => {
           return (
-            <div key={rowindex}>
+            <div key={rowindex} className="row">
               {myrow.map((node, nodeindex) => {
                 const {
                   row,

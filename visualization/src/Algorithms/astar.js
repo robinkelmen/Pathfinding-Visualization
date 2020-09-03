@@ -14,7 +14,7 @@ export const astar = (start, goal, grid) => {
   while (!openSet.isEmpty()) {
     const currentnode = openSet.pop();
     currentnode.getItem().isVisited = true;
-
+    console.log(currentnode.getItem());
     closedSet.push(currentnode);
     //if (currentnode === null) break;
     if (currentnode.getItem() === goal) {
@@ -28,33 +28,24 @@ export const astar = (start, goal, grid) => {
   return closedSet;
 };
 function closestNode(currentnode, goal, neighbours, closedSet, openSet) {
-  let closest = null;
-  let lowestCost = null;
-  let lowestF = null;
-
   for (let i = 0; i < neighbours.length; i++) {
     const neighbour = neighbours[i];
-    if (
-      closedSet.filter(
-        (node) =>
-          node.getItem().col === neighbour.col &&
-          node.getItem().row === neighbour.row
-      ).length > 0
-    )
-      continue;
-    var g = currentnode.getItem().gscore + 1;
+
+    var g =
+      currentnode.getItem().gscore +
+      getDistance(neighbour, currentnode.getItem());
 
     var h = getDistance(goal, neighbour);
 
     var f = g + h;
 
-    let openNode = openSet.contains(neighbour);
-    if (openNode !== null && g > openNode.gscore) continue;
-
-    neighbour.gscore = g;
-    neighbour.previousNode = currentnode.getItem();
-
-    openSet.insert(new QueueItem(neighbour, f));
+    if (g < neighbour.gscore) {
+      neighbour.previousNode = currentnode.getItem();
+      neighbour.gscore = g;
+      if (openSet.contains(neighbour) === null) {
+        openSet.insert(new QueueItem(neighbour, f));
+      }
+    }
   }
 }
 //manhatan distance
